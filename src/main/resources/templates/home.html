@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+
+  <head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <title>Blog Home - Start Bootstrap Template</title>
+    <!-- Bootstrap core CSS -->
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap core CSS -->
+    <link href="vendor/bootstrap/css/blog-home.css" rel="stylesheet">
+  </head>
+
+  <body>
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <div class="container">
+      <a class="navbar-brand" href="#"><h2>Tu Blog</h2></a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="/home">Home
+              <span class="sr-only">(current)</span>
+            </a>
+          </li>
+          <li class="nav-item" th:if="${registeredUser.id}">
+            <a class="nav-link" href="/logout"> <i class="fa fa-fw fa-sign-out"></i>Salir</a>
+          </li>
+          <li class="nav-item"  th:unless="${registeredUser.id}">
+            <a class="nav-link" href="/login.html"><i class="fa fa-fw fa-sign-in"></i>Iniciar sesion</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/registrar" th:if="${registeredUser.administrador}"></i>Registrar</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/articuloForm.html" th:if="${registeredUser.autor}"></i>Postear</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" style="color:blanchedalmond" href="/home" th:href="|/articulos?usuarioid=${registeredUser.id}|"  th:text="${registeredUser.username}" ></i></a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Page Content -->
+    <div class="container">
+
+      <div class="row">
+
+        <!-- Blog Entries Column -->
+        <div class="col-md-8">
+
+          <h1 class="my-4">
+            <small th:unless="${etiqueta}">La libertad está en leer</small>
+            <small th:if="${etiqueta}">Búsqueda de articulos con etiqueta:
+              <div th:text="${etiqueta.etiqueta}"></div></small>
+
+          </h1>
+
+          <!-- Blog Post -->
+          <div th:each="articulo:${listaArticulos}" >
+            <div class="card mb-4">
+              <div class="card-body">
+                <h2 class="card-title"  th:text="${articulo.titulo}">Post Title</h2>
+                <!--para que solo muestre los primeros 200 caracteres-->
+                <p class="card-text"  th:text="${ #strings.abbreviate(articulo.cuerpo,200)}">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis aliquid atque, nulla? Quos cum ex quis soluta, a laboriosam. Dicta expedita corporis animi vero voluptate voluptatibus possimus, veniam magni quis!</p>
+                <div align="right" th:if="${registeredUser.administrador} OR ${articulo.autor.id} == ${registeredUser.id}">
+                  <form method="post" action="/borrarArticulo">
+                    <input type="hidden" name="articuloid" th:value="${articulo.id}">
+                    <a href="/home" th:href="|/ver?id=${articulo.id}|" class="btn btn-primary">Leer más</a>
+                    <a th:if="${articulo.autor.id} == ${registeredUser.id}" href="/home" th:href="|/editarArticulo?id=${articulo.id}|" class="btn btn-info">Editar</a>
+                    <button class="btn btn-danger" type="submit">x</button>
+                  </form>
+                </div>
+                <div align="right"th:unless="${registeredUser.administrador}  OR ${articulo.autor.id} == ${registeredUser.id}">
+                  <a href="/home" th:href="|/ver?id=${articulo.id}|" class="btn btn-primary">Leer más &rarr;</a>
+                </div>
+              </div>
+              <div class="card-footer" th:text="${articulo.autor.nombre} + ' ' + ${articulo.fecha}">
+              </div>
+            </div>
+          </div>
+          <!-- Pagination -->
+          <input type="hidden" name="pagina" id="pagina" th:value="${pagina}">
+          <ul class="pagination justify-content-center mb-4">
+            <li class="page-item" id="reciente">
+              <botton class="page-link" id="preciente" >&larr;</botton>
+            </li>
+            <li class="page-item" id="anterior">
+              <botton class="page-link" id="panterior">&rarr;</botton>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Sidebar Widgets Column -->
+        <div class="col-md-4">
+          <!-- Etiquetas Widget -->
+          <!--<div class="card my-4">-->
+            <!--<h5 class="card-header">Etiquetas</h5>-->
+            <!--<div class="card-body">-->
+              <!--<div class="row">-->
+                <!--<div class="col-lg-6">-->
+                  <!--<ul class="list-unstyled mb-0">-->
+                    <!--<li>-->
+                      <!--<a href="#">Web Design</a>-->
+                    <!--</li>-->
+                    <!--<li>-->
+                      <!--<a href="#">HTML</a>-->
+                    <!--</li>-->
+                    <!--<li>-->
+                      <!--<a href="#">Freebies</a>-->
+                    <!--</li>-->
+                  <!--</ul>-->
+                <!--</div>-->
+                <!--<div class="col-lg-6">-->
+                  <!--<ul class="list-unstyled mb-0">-->
+                    <!--<li>-->
+                      <!--<a href="#">JavaScript</a>-->
+                    <!--</li>-->
+                    <!--<li>-->
+                      <!--<a href="#">CSS</a>-->
+                    <!--</li>-->
+                    <!--<li>-->
+                      <!--<a href="#">Tutorials</a>-->
+                    <!--</li>-->
+                  <!--</ul>-->
+                <!--</div>-->
+              <!--</div>-->
+            <!--</div>-->
+          <!--</div>-->
+
+
+
+          <!-- Etiquetas Widget -->
+          <div class="card my-4">
+            <h5 class="card-header">Etiquetas</h5>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-lg-6">
+                  <ul class="list-unstyled mb-0" th:each="etiqueta:${etiquetas}">
+                    <li>
+                      <a href="#" th:href="|/articulosDeEtiqueta?etiqueta=${etiqueta.id}|" th:text="${etiqueta.etiqueta}">Web Design</a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+
+          <!--&lt;!&ndash; Side Widget &ndash;&gt;-->
+          <!--<div class="card my-4">-->
+            <!--<h5 class="card-header">Side Widget</h5>-->
+            <!--<div class="card-body">-->
+              <!--You can put anything you want inside of these side widgets. They are easy to use, and feature the new Bootstrap 4 card containers!-->
+            <!--</div>-->
+          <!--</div>-->
+
+        </div>
+
+      </div>
+      <!-- /.row -->
+
+    </div>
+    <!-- /.container -->
+
+    <!-- Footer -->
+    <footer class="py-5 bg-dark">
+      <div class="container">
+        <p class="m-0 text-center text-white">Copyright &copy; Internet Avanzado 2018</p>
+      </div>
+      <!-- /.container -->
+    </footer>
+  <!-- Bootstrap core JavaScript -->
+  <script src="vendor/jquery/jquery.min.js"></script>
+  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+
+  <script src="vendor/scripts/home.js"></script>
+
+  </body>
+
+</html>

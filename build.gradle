@@ -1,0 +1,50 @@
+plugins {
+    id 'java'
+}
+
+group 'do.pucmm.ce'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.11'
+    //Librerias de Hibernate
+    compile 'org.hibernate:hibernate-core:5.1.0.Final'
+    compile 'org.hibernate:hibernate-entitymanager:5.1.0.Final'
+
+    compile "com.sparkjava:spark-template-thymeleaf:2.5.5"
+    //Libreria Spark
+    compile "com.sparkjava:spark-core:2.7.2"
+    compile 'com.h2database:h2:1.4.191'
+
+    compile 'org.thymeleaf:thymeleaf:3.0.5.RELEASE'
+
+    // https://mvnrepository.com/artifact/org.jasypt/jasypt
+    compile group: 'org.jasypt', name: 'jasypt', version: '1.4.1'
+    compile "org.slf4j:slf4j-simple:1.7.21"
+
+    //para enviar json y comunicarse con calquiera
+    compile 'com.google.code.gson:gson:2.6.2'
+}
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
