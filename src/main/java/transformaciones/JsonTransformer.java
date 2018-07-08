@@ -3,7 +3,7 @@ package transformaciones;
 import com.google.gson.Gson;
 import spark.ResponseTransformer;
 
-public class Json implements ResponseTransformer {
+public class JsonTransformer implements ResponseTransformer {
 
     private Gson gson = new Gson();
 

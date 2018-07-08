@@ -7,7 +7,7 @@ import static spark.Spark.*;
 
 import spark.*;
 import spark.template.thymeleaf.ThymeleafTemplateEngine;
-import transformaciones.Json;
+import transformaciones.JsonTransformer;
 
 import java.util.*;
 import java.util.Set;
@@ -26,7 +26,7 @@ public class ManejoRutas {
 
     public void rutas(){
 
-        Json jsonTransformer = new Json();
+        JsonTransformer jsonTransformerTransformer = new JsonTransformer();
 
         get("/home", (request, response) -> {
             ArticuloServices as = new ArticuloServices();
@@ -63,6 +63,26 @@ public class ManejoRutas {
 
             return renderThymeleaf(modelo,"/registrar");
         });
+
+
+        get("/test", (request, response) -> {
+            ArticuloServices as = new ArticuloServices();
+
+            int pagina = Integer.parseInt(request.queryParamOrDefault("pagina", "1"));
+            int sz = Integer.parseInt(request.queryParamOrDefault("sz", "5"));
+            pagina = max(pagina,1);
+            List<Articulo> listaArticulos = as.listaArticulos(pagina, sz);
+
+            for(Articulo i: listaArticulos){
+                i.setComentarios(null);
+                i.setEtiquetas(null);
+            }
+
+            Map<String, Object> modelo = new HashMap<>();
+            modelo.put("listaArticulos", listaArticulos);
+
+            return listaArticulos;
+        }, jsonTransformerTransformer);
 
         post("/registrar", (request, response) -> {
             Usuario usuario = new Usuario();

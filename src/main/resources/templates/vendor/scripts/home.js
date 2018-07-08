@@ -1,4 +1,3 @@
-
 "use strict";
 
 
@@ -13,6 +12,7 @@ $('#panterior').on('click', function () {
 });
 
 $('#preciente').on('click', function () {
+
     paginaActual--;
     cargarArticuloPorPagina(paginaActual);
 });
@@ -40,5 +40,16 @@ function cargarArticuloPorPagina() {
 
 
 }
+
+function testFun() {
+    $.get("/test",function (resp) {
+        console.log(resp);
+    });
+}
+
+
+$('#boton').on('click', function () {
+    testFun();
+});
 
 
