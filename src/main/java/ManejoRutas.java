@@ -69,7 +69,7 @@ public class ManejoRutas {
             ArticuloServices as = new ArticuloServices();
 
             int pagina = Integer.parseInt(request.queryParamOrDefault("pagina", "1"));
-            int sz = Integer.parseInt(request.queryParamOrDefault("sz", "5"));
+            int sz = 5;
             pagina = max(pagina,1);
             List<Articulo> listaArticulos = as.listaArticulos(pagina, sz);
 
@@ -81,7 +81,7 @@ public class ManejoRutas {
             Map<String, Object> modelo = new HashMap<>();
             modelo.put("listaArticulos", listaArticulos);
 
-            return listaArticulos;
+            return modelo;
         }, jsonTransformerTransformer);
 
         post("/registrar", (request, response) -> {
@@ -245,7 +245,7 @@ public class ManejoRutas {
             Session session = request.session(true);
 
             int etiqueta = Integer.parseInt(request.queryParamOrDefault("etiqueta", "1"));
-
+            System.out.println(request);
             List<Articulo> listaArticulos =new ArrayList<>(as.listaArticulosByTag((long)etiqueta));
             Map<String, Object> modelo = new HashMap<>();
             modelo.put("listaArticulos", listaArticulos);
@@ -298,6 +298,43 @@ public class ManejoRutas {
             response.redirect("/ver?id=" + articuloid);
             return null;
         });
+
+
+        get("/pagina", (request, response) -> {
+            ArticuloServices as = new ArticuloServices();
+            Usuario usuario = new Usuario();
+            Session session = request.session(true);
+
+            System.out.println(request.body());
+            System.out.println(request.queryParams("pagina"));
+
+            int pagina = Integer.parseInt(request.queryParamOrDefault("pagina", "1"));
+            int sz = Integer.parseInt(request.queryParamOrDefault("sz", "5"));
+            pagina = max(pagina,1);
+            List<Articulo> listaArticulos = as.listaArticulos(pagina, sz);
+            Map<String, Object> modelo = new HashMap<>();
+            modelo.put("listaArticulos", listaArticulos);
+            modelo.put("pagina", pagina);
+            modelo.put("etiquetas", new EtiquetaServices().getEtiquetas());
+
+            if(request.cookie("usuario") != null){
+                UsuarioServices us = new UsuarioServices();
+                usuario = us.getUsuario(Integer.parseInt(request.cookie("usuario")));
+                session.attribute("usuario", usuario);
+            }
+
+            if(session.attribute("usuario") != null) usuario = session.attribute("usuario");
+
+            modelo.put("registeredUser", usuario);
+
+            return renderThymeleaf(modelo,"/pagina");
+        });
+
+
+
+
+
+
     }
 
     private static Object procesarParametros(Request request, Response response){

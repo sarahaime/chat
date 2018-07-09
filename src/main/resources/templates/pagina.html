@@ -1,0 +1,59 @@
+<!-- Blog Post -->
+    <div th:fragment="pagiana" xmlns:th="http://www.w3.org/1999/xhtml" th:each="articulo:${listaArticulos}">
+        <div class="card mb-4">
+            <div class="card-body">
+                <h2 class="card-title"  th:text="${articulo.titulo}">Post Title</h2>
+                <!--para que solo muestre los primeros 200 caracteres-->
+                <p class="card-text"  th:text="${ #strings.abbreviate(articulo.cuerpo,200)}">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis aliquid atque, nulla? Quos cum ex quis soluta, a laboriosam. Dicta expedita corporis animi vero voluptate voluptatibus possimus, veniam magni quis!</p>
+                <div align="right" th:if="${registeredUser.administrador} OR ${articulo.autor.id} == ${registeredUser.id}">
+                    <form method="post" action="/borrarArticulo">
+                        <input type="hidden" name="articuloid" th:value="${articulo.id}">
+                        <a href="/home" th:href="|/ver?id=${articulo.id}|" class="btn btn-primary">Leer más</a>
+                        <a th:if="${articulo.autor.id} == ${registeredUser.id}" href="/home" th:href="|/editarArticulo?id=${articulo.id}|" class="btn btn-info">Editar</a>
+                        <button class="btn btn-danger" type="submit">x</button>
+                    </form>
+                </div>
+                <div align="right"th:unless="${registeredUser.administrador}  OR ${articulo.autor.id} == ${registeredUser.id}">
+                    <a href="/home" th:href="|/ver?id=${articulo.id}|" class="btn btn-primary">Leer más &rarr;</a>
+                </div>
+            </div>
+            <div class="card-footer" th:text="${articulo.autor.nombre} + ' ' + ${articulo.fecha}">
+            </div>
+        </div>
+    </div>
+    <!-- Pagination -->
+    <input type="hidden" name="pagina" id="pagina" th:value="${pagina}">
+    <ul class="pagination justify-content-center mb-4">
+        <li class="page-item" id="reciente">
+            <botton class="page-link" id="preciente" >&larr;</botton>
+        </li>
+        <li class="page-item" id="anterior">
+            <botton class="page-link" id="panterior">&rarr;</botton>
+        </li>
+    </ul>
+</div>
+
+<script>
+    "use strict";
+    var paginaActual = $('#pagina').val();
+
+    $('#panterior').on('click', function () {
+        paginaActual++;
+        cargarArticuloPorPagina(paginaActual);
+    });
+
+    $('#preciente').on('click', function () {
+        paginaActual--;
+        cargarArticuloPorPagina(paginaActual);
+    });
+
+    function cargarArticuloPorPagina() {
+        console.log("Estoy en la pagina: " + paginaActual);
+
+        if( paginaActual < 1 ) {
+            paginaActual= 1;
+        }
+
+        $('#listaArticulos').load('/pagina?pagina='+paginaActual);
+    }
+</script>

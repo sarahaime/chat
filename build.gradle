@@ -27,13 +27,10 @@ dependencies {
     //Libreria Spark
     compile "com.sparkjava:spark-core:2.7.2"
     compile 'com.h2database:h2:1.4.191'
-
     compile 'org.thymeleaf:thymeleaf:3.0.5.RELEASE'
 
-    // https://mvnrepository.com/artifact/org.jasypt/jasypt
     compile group: 'org.jasypt', name: 'jasypt', version: '1.4.1'
-    compile "org.slf4j:slf4j-simple:1.7.21"
-
+    compile 'org.slf4j:slf4j-simple:1.7.21'
     //para enviar json y comunicarse con calquiera
     compile 'com.google.code.gson:gson:2.6.2'
 }
