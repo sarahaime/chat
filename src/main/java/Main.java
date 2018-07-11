@@ -17,6 +17,11 @@ import static spark.Spark.post;
 
 public class Main {
     public static void main(String[] args)throws SQLException {
+
+        //AQUI antes de abrir alguna ruta.
+        webSocket("/mensajeria", WebSocketHandler.class);
+
+
         //Iniciando el servicio
         BootStrapServices.startDb();
 
@@ -25,6 +30,7 @@ public class Main {
 
         //indicando los recursos publicos, con esto se puede acceder a ellos sin hacerle metodos get ni post ni nada de eso
         staticFiles.location("/templates");
+
 
 
         EntityManagerFactory emf =  Persistence.createEntityManagerFactory("practica4");

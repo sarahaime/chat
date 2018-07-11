@@ -1,46 +1,60 @@
-<!DOCTYPE html>
-<html>
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <script src="/js/jquery-1.12.4.min.js"></script>
-    <script src="/js/bootstrap.js"></script>
-    <script src="/js/chatSnippet.js"></script>
-    <script src="/js/jquery.mCustomScrollbar.concat.min.js"></script>
-    <script src="/js/chatUsuario.js"></script>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script>
+        //web socket
+        var webSocket;
+
+        function conectar() {
+            webSocket = new WebSocket("ws://" + location.hostname + ":" + location.port + "/mensajeria");
+            //indicando los eventos:
+            webSocket.onmessage = function(data){recibirMsj(data);};
+        }
+
+        function recibirMsj(mensaje){
+            $("#mensajesChat").append(mensaje.data);
+        }
+
+        $(document).ready(function(){
+            conectar();
+
+            //para enviar los mensajes
+            $("#enviar").click(function(){
+                $("#mensajesChat").append("<div>Tu dices: " + $("#mensajeUsuario").val() + " </div> <br>");
+                webSocket.send($("#mensajeUsuario").val());
+                $("#mensajeUsuario").val("");
+            });
+        });
+
+
+        //para reconexion automatica
+        function verificarConexion(){
+            if(webSocket.readyState === 3 || !webSocket){
+                conectar();
+            }
+        }
+
+        setInterval(verificarConexion, 5000);
+
+
+    </script>
+
 </head>
-<body>
 
-<input type="hidden" id="usuario" value="${usuario.getUsername()}">
-<input type="hidden" id="usuario_destino" value="${administrador.getUsername()}">
-<div class="container">
-    <div id="chatbox" class="row  col-xs-5 col-md-5" id="chat_window_1" style="margin-left: 30%" >
-        <div class="col-xs-12 col-md-12">
-            <div class=" panel panel-default">
-                <div class="panel-heading top-bar">
-                    <div class="col-md-8 col-xs-8">
-                        <h3 class="panel-title"><span class="glyphicon glyphicon-comment"></span> ${administrador.getNombre()}</h3>
-                    </div>
 
-                </div>
-                <div class="panel-body  msg_container_base" >
-                    <div id="chat_panel">
 
-                    </div>
+<br/>
 
-                </div>
-            </div>
-            <div class="panel-footer">
-                <div class="input-group">
-                    <input id="btn-input" type="text" class="form-control input-sm chat_input" placeholder="Escriba su mensaje..." />
-                    <span class="input-group-btn">
-                        <button class="btn btn-primary btn-sm" id="btn-chat">Enviar</button>
-                        </span>
-                </div>
-            </div>
-        </div>
-    </div>
+<div class="card card-primary" >
+    <h5>Mensajes</h5>
+    <div id="mensajesChat"></div>
+    <br>
+    <br>
+    <input id="mensajeUsuario" type="text" name="mensajeUsuario" placeholder="Escriba su mensaje aqui..">
+    <button id="enviar" type="button" class="btn-success">Enviar </button>
+
 </div>
-</body>
 <script>
     (function($){
         $(window).on("load",function(){
