@@ -90,10 +90,20 @@ public class WebSocketServices {
         }
     }
 
-    public static int createChat(String clientAddress){
+    public static int createChat(String clientAddress, String username){
+
+        for(Chat chat: chats){
+            if (chat.getUserAddress() == clientAddress){
+                chat.setUsername(username);
+                return chat.getId();
+            }
+        }
+
         Chat chat = new Chat(clientAddress);
         chat.setId(Chat.nextChatID++);
+        chat.setUsername(username);
         chats.add(chat);
+
         return chat.getId();
     }
 
@@ -110,27 +120,18 @@ public class WebSocketServices {
         return temp;
     }
 
-    public static void createChatMessage(Mensaje cm){
-        cm.setId(Mensaje.nextMsjID++);
-        mensajes.add(cm);
+    public static void createChatMessage(Mensaje sms){
+        mensajes.add(sms);
     }
 
     public static List<Mensaje> getMessages(int chatID){
-        List<Mensaje> ownMessages = new ArrayList<>();
+        List<Mensaje> aux = new ArrayList<>();
         for(Mensaje mensaje: mensajes){
             if(mensaje.getChatID() == chatID){
-                ownMessages.add(mensaje);
+                aux.add(mensaje);
             }
         }
-        ownMessages.sort(new Comparator<Mensaje>() {
-            @Override
-            public int compare(Mensaje a, Mensaje b) {
-                if (b.getId() - a.getId() > 0) return 1;
-                if (a.getId() - b.getId() > 0) return -1;
-                return 0;
-            }
-        });
-        return ownMessages;
+        return aux;
     }
 
     private static void getLastMessage(List<Chat> chats){

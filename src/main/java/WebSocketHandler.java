@@ -1,4 +1,5 @@
 import modelos.Chat;
+import modelos.Mensaje;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketClose;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketConnect;
@@ -6,6 +7,7 @@ import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
 import org.eclipse.jetty.websocket.api.annotations.WebSocket;
 import servicios.WebSocketServices;
 import java.io.IOException;
+import java.util.Date;
 
 @WebSocket
 public class WebSocketHandler {
@@ -25,23 +27,40 @@ public class WebSocketHandler {
 
     @OnWebSocketMessage
     public void recibiendoMensaje(Session usuario, String message) {
-        System.out.println("Recibiendo del cliente: "+usuario.getLocalAddress().getAddress().toString()+" - Mensaje: " + message);
-
-        String comando = message.split(":mensaje:")[0];
-        String val = message.split(":mensaje:")[1];
-
-        if (comando.equals("responder")){
-            Chat chat = WebSocketServices.getChatByID(Integer.parseInt(val));
-            chat.setAdminAddress(usuario.getRemoteAddress().toString());
-            WebSocketServices.updateChat(chat);
-        }
-
-
+        System.out.println(message);
         try {
+            String comando = message.split(":chat:")[0];
+            String val = message.split(":chat:")[1];
+
+            if (comando.equals("tomar")){
+                Chat chat = WebSocketServices.getChatByID(Integer.parseInt(val));
+                chat.setAdminAddress(usuario.getRemoteAddress().toString());
+                WebSocketServices.updateChat(chat);
+            }
+
+            if (comando.equals("abrir")){
+                WebSocketServices.createChat(usuario.getRemoteAddress().toString(), val);
+                usuario.getRemote().sendString("<strong>Bot: </strong>  Hola " + val);
+            }
+
+            if (comando.equals("user")){
+                Chat chat = WebSocketServices.getChatByUserAdd(usuario.getRemoteAddress().toString());
+                String msj = "<strong> "+ chat.getUsername() + " dice: </strong>" + val;
+                WebSocketServices.mensajes.add(new Mensaje(chat.getId(), msj, new Date()));
+                if(chat.getAdminAddress() != null) WebSocketServices.enviarMensaje(msj,chat.getAdminAddress());
+            }
+
+            if (comando.equals("admin")){
+                Chat chat = WebSocketServices.getChatByAdminAdd(usuario.getRemoteAddress().toString());
+                String msj =  "<strong>El Bogger dice: <strong>" + val;
+                WebSocketServices.mensajes.add(new Mensaje(chat.getId(),msj, new Date()));
+                WebSocketServices.enviarMensaje(msj,chat.getUserAddress());
+            }
+
             //Enviar un simple mensaje al cliente que mando al servidor..
-            usuario.getRemote().sendString("Mensaje enviado al Servidor: " + message);
+        //    usuario.getRemote().sendString("Mensaje enviado al Servidor: " + message);
             //mostrando a todos los clientes
-            WebSocketServices.enviarMensaje(message,"abc123");
+          //  WebSocketServices.enviarMensaje(message,"abc123");
 
         } catch (IOException e) {
             e.printStackTrace();

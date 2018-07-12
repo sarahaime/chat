@@ -4,33 +4,25 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.util.Date;
-@Entity
+
 public class Mensaje {
 
-    @Id
-    @GeneratedValue
-    private int id;
-
-    @Column(columnDefinition = "text")
+    private int chatID;
     private String mensaje;
-
-    @CreationTimestamp
-    @Temporal(TemporalType.TIMESTAMP)
     private Date fechaEnvio;
 
-    public static int nextMsjID = 0;
+    public Mensaje(int chatID, String mensaje, Date fechaEnvio) {
+        this.chatID = chatID;
+        this.mensaje = mensaje;
+        this.fechaEnvio = fechaEnvio;
+    }
 
-
+    public Mensaje() { }
 
     public void setChatID(int chatID) {
         this.chatID = chatID;
     }
 
-    private int chatID;
-
-    public int getId() {
-        return id;
-    }
 
 
     public String getMensaje() {
@@ -47,10 +39,6 @@ public class Mensaje {
 
     public void setFechaEnvio(Date fechaEnvio) {
         this.fechaEnvio = fechaEnvio;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public int getChatID() {
