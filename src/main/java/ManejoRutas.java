@@ -333,8 +333,6 @@ public class ManejoRutas {
 
 
 
-
-
     }
 
     private static Object procesarParametros(Request request, Response response){

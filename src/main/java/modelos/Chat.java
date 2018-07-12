@@ -8,7 +8,7 @@ public class Chat {
     @GeneratedValue
     private long id;
     private String userAddress;
-    private String adminAddress = null;
+    private String adminAddress = "-1";
     public static int nextChatID = 0;
     @OneToMany(fetch = FetchType.EAGER)
     private Set<Mensaje> mensajes;

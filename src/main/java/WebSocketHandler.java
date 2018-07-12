@@ -11,14 +11,14 @@ public class WebSocketHandler {
 
     @OnWebSocketConnect
     public void conectando(Session usuario){
-        System.out.println("Conectando Usuario: "+usuario.getLocalAddress().getAddress().toString());
+        System.out.println("Conectando Usuario: "+usuario.getRemoteAddress().toString());
         WebSocketServices.usuariosEnLinea.add(usuario);
     }
 
     //hay que dejar los 2 parametros ultimos, son parte del protocolo, si no se ponen el programa explota
     @OnWebSocketClose
     public void cerrandoConexion(Session usuario, int statusCode, String reason) {
-        System.out.println("Desconectando el usuario: "+usuario.getLocalAddress().getAddress().toString());
+        System.out.println("Desconectando el usuario: " + usuario.getRemoteAddress().toString());
         WebSocketServices.usuariosEnLinea.remove(usuario);
     }
 
