@@ -32,10 +32,10 @@ body
     font-family: 'Open Sans', sans-serif;
 }
 .round.hollow a:hover {
-    border: 2px solid #4fa24a;
+    border: 2px solid #000000;
     border-radius: 35px;
     color: red;
-    color: #4fa24a;
+    color: #000000;
     font-size: 23px;
     padding: 10px 21px;
     text-decoration: none;
@@ -85,7 +85,7 @@ body
     width: 44px;
 }
 .popup-messages-footer > textarea {
-    border-bottom: 1px solid #b2b2b2 !important;
+    border-bottom: 1px solid #007bff !important;
     height: 34px !important;
     margin: 7px;
     padding: 5px !important;
@@ -143,12 +143,14 @@ body
     vertical-align: top !important;
 }
 .chat-header-button {
-    background: transparent none repeat scroll 0 0;
+    background: url("https://www.hypetap.com/assets/qv/images/svgs/close-icon.svg");
     border: 1px solid #636364;
     border-radius: 50%;
     font-size: 14px;
     height: 30px;
     width: 30px;
+    float: right;
+    margin-right: 20px;
 }
 .popup-head-right .btn-group .dropdown-menu {
     border: medium none;
@@ -193,7 +195,7 @@ body
     font-size: 15px;
     font-weight: 600;
     margin: 0 0 0 49px !important;
-    color: #fff;
+    color: #007bff;
     opacity: 0.9;
 }
 .popup-messages .direct-chat-info {
@@ -206,7 +208,6 @@ body
 }
 .popup-messages  .direct-chat-img {
     border: 1px solid #fff;
-    background: #3f9684  none repeat scroll 0 0;
     border-radius: 50%;
     float: left;
     height: 40px;
