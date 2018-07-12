@@ -9,7 +9,7 @@ public class Mensaje {
 
     @Id
     @GeneratedValue
-    private long id;
+    private int id;
 
     @Column(columnDefinition = "text")
     private String mensaje;
@@ -17,13 +17,21 @@ public class Mensaje {
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaEnvio;
-    public long getId() {
+
+    public static int nextMsjID = 0;
+
+
+
+    public void setChatID(int chatID) {
+        this.chatID = chatID;
+    }
+
+    private int chatID;
+
+    public int getId() {
         return id;
     }
 
-    public void setId(long id) {
-        this.id = id;
-    }
 
     public String getMensaje() {
         return mensaje;
@@ -39,6 +47,14 @@ public class Mensaje {
 
     public void setFechaEnvio(Date fechaEnvio) {
         this.fechaEnvio = fechaEnvio;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getChatID() {
+        return chatID;
     }
 
 }

@@ -1,3 +1,4 @@
+import modelos.Chat;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketClose;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketConnect;
@@ -24,10 +25,21 @@ public class WebSocketHandler {
 
     @OnWebSocketMessage
     public void recibiendoMensaje(Session usuario, String message) {
-        System.out.println("Recibiendo del cliente: "+usuario.getLocalAddress().getAddress().toString()+" - Mensaje"+message);
+        System.out.println("Recibiendo del cliente: "+usuario.getLocalAddress().getAddress().toString()+" - Mensaje: " + message);
+
+        String comando = message.split(":mensaje:")[0];
+        String val = message.split(":mensaje:")[1];
+
+        if (comando.equals("responder")){
+            Chat chat = WebSocketServices.getChatByID(Integer.parseInt(val));
+            chat.setAdminAddress(usuario.getRemoteAddress().toString());
+            WebSocketServices.updateChat(chat);
+        }
+
+
         try {
             //Enviar un simple mensaje al cliente que mando al servidor..
-            usuario.getRemote().sendString("Mensaje enviado al Servidor: "+message);
+            usuario.getRemote().sendString("Mensaje enviado al Servidor: " + message);
             //mostrando a todos los clientes
             WebSocketServices.enviarMensaje(message,"abc123");
 

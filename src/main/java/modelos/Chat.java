@@ -2,23 +2,46 @@ package modelos;
 
 import javax.persistence.*;
 import java.util.Set;
-@Entity
+//@Entity
 public class Chat {
     @Id
     @GeneratedValue
-    private long id;
+    private int id;
     private String userAddress;
+    private String username;
     private String adminAddress = "-1";
     public static int nextChatID = 0;
-    @OneToMany(fetch = FetchType.EAGER)
-    private Set<Mensaje> mensajes;
+//    @OneToMany(fetch = FetchType.EAGER)
+//    private Set<Mensaje> mensajes;
 
 
-    public long getId() {
+    public Chat(){}
+
+    public Mensaje getLastMessage() {
+        return lastMessage;
+    }
+
+    public void setLastMessage(Mensaje lastMessage) {
+        this.lastMessage = lastMessage;
+    }
+
+    private Mensaje lastMessage;
+
+
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public int getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -46,13 +69,26 @@ public class Chat {
         Chat.nextChatID = nextChatID;
     }
 
-    public Set<Mensaje> getMensajes() {
-        return mensajes;
+//    public Set<Mensaje> getMensajes() {
+//        return mensajes;
+//    }
+//
+//    public void setMensajes(Set<Mensaje> mensajes) {
+//        this.mensajes = mensajes;
+//    }
+
+    public Chat (String userAddress){
+        this.userAddress = userAddress;
     }
 
-    public void setMensajes(Set<Mensaje> mensajes) {
-        this.mensajes = mensajes;
+    public Chat(int id, String userAddress, String adminAddress){
+        this.adminAddress = adminAddress;
+        this.userAddress= userAddress;
+        this.id = id;
     }
+
+
+
 
 
 }
