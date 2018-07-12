@@ -44,6 +44,10 @@
           <li class="nav-item">
             <a class="nav-link" href="/articuloForm.html" th:if="${registeredUser.autor}"></i>Postear</a>
           </li>
+
+          <li class="nav-item">
+            <a class="nav-link" href="/admin-autorChat.html"></i>Chat admin</a>
+          </li>
           <li class="nav-item">
             <a class="nav-link" style="color:blanchedalmond" href="/home" th:href="|/articulos?usuarioid=${registeredUser.id}|"  th:text="${registeredUser.username}" ></i></a>
           </li>
