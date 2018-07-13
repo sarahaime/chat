@@ -20,6 +20,7 @@ public class WebSocketServices {
             try {
                 if( sesionConectada.getRemote().toString().equalsIgnoreCase(addresDestino)){
                     sesionConectada.getRemote().sendString(mensaje);
+                    break;
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -36,6 +37,15 @@ public class WebSocketServices {
     }
 
 
+    public static void enviarBroadcast(String mensaje){
+        for(Session sesionConectada : usuariosEnLinea){
+            try {
+                sesionConectada.getRemote().sendString(mensaje);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
     public static void updateChat(Chat ch){
         for(Chat chat: chats){

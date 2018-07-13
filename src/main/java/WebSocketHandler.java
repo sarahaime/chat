@@ -42,6 +42,7 @@ public class WebSocketHandler {
                 chat.setOpen(true);
                 WebSocketServices.updateChat(chat);
                 WebSocketServices.enviarMensaje(WebSocketServices.getMessages(chatID),chat.getAdminAddress());
+                WebSocketServices.enviarBroadcast("recargar");
             }
 
             if (comando.equals("soltar")){

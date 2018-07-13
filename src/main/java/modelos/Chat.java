@@ -16,7 +16,6 @@ public class Chat {
 //    @OneToMany(fetch = FetchType.EAGER)
 //    private Set<Mensaje> mensajes;
 
-
     public Chat(){}
 
     public Mensaje getLastMessage() {
