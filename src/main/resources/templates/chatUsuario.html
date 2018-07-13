@@ -1,6 +1,7 @@
 <head>
     <!--<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">-->
     <link href="css/chat.css" rel="stylesheet">
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
     <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
     <!------ Include the above in your HEAD tag ---------->
@@ -25,8 +26,8 @@
 
             //para enviar los mensajes
             $("#enviar").click(function(){
-                $("#mensajesChat").append("<div>Tu dices: " + $("#mensajeUsuario").val() + " </div> <br>");
-                webSocket.send($("#mensajeUsuario").val());
+                $("#mensajesChat").append("<div class='pull-right'><strong>Tu:</strong> " + $("#mensajeUsuario").val() + " </div> <br>");
+                webSocket.send("user:chat:" + $("#mensajeUsuario").val());
                 $("#mensajeUsuario").val("");
             });
         });
@@ -47,20 +48,15 @@
 </head>
 
 <body>
-
+<div style="margin-top:60px;position:fixed;height:32px;width:100%; bottom: 20px">
 <div class="container text-center">
     <div class="row">
         <div class="round hollow text-center">
             <a href="#" id="addClass"><span class="glyphicon glyphicon-comment"></span> Abrir chat </a>
         </div>
-
         <hr>
-
-
     </div>
 </div>
-
-
 <div class="popup-box chat-popup" id="qnimate">
     <div class="popup-head">
         <div class="popup-head-left pull-left"><img src="https://cdn1.iconfinder.com/data/icons/managers-15/494/Untitled-32-512.png" alt="iamgurdeeposahan"> Usuario
@@ -79,92 +75,36 @@
         </div>
     </div>
     <div class="popup-messages">
-
-
-
-
         <div class="direct-chat-messages">
-
-
             <div class="chat-box-single-line">
                 <abbr class="timestamp">Julio, 2018</abbr>
             </div>
 
-
-            <!-- Message. Default to the left -->
-            <div class="direct-chat-msg doted-border">
-                <div class="direct-chat-info clearfix">
-                    <span class="direct-chat-name pull-left">Usuario</span>
-                </div>
-                <!-- /.direct-chat-info -->
-                <img alt="message user image" src="https://cdn1.iconfinder.com/data/icons/managers-15/494/Untitled-32-512.png" class="direct-chat-img"><!-- /.direct-chat-img -->
-                <div class="direct-chat-text">
-                   Hola!!
-                </div>
-                <div class="direct-chat-info clearfix">
-                    <span class="direct-chat-timestamp pull-right">3.36 PM</span>
-                </div>
-                <div class="direct-chat-info clearfix">
-						<span class="direct-chat-img-reply-small pull-left">
-
-						</span>
-                    <span class="direct-chat-reply-name">Usuario</span>
-                </div>
-                <!-- /.direct-chat-text -->
+            <div id="mensajesChat">
             </div>
-            <!-- /.direct-chat-msg -->
-
-
-            <div class="chat-box-single-line">
-                <abbr class="timestamp">Julio, 2018</abbr>
-            </div>
-
-
-
-            <!-- Message. Default to the left -->
-            <div class="direct-chat-msg doted-border">
-                <div class="direct-chat-info clearfix">
-                    <span class="direct-chat-name pull-left">Usuario</span>
-                </div>
-                <!-- /.direct-chat-info -->
-                <img alt="iamgurdeeposahan" src="https://cdn1.iconfinder.com/data/icons/managers-15/494/Untitled-32-512.png" class="direct-chat-img"><!-- /.direct-chat-img -->
-                <div class="direct-chat-text">
-                    Hey!
-                </div>
-                <div class="direct-chat-info clearfix">
-                    <span class="direct-chat-timestamp pull-right">3.36 PM</span>
-                </div>
-
-                <!-- /.direct-chat-text -->
-            </div>
-            <!-- /.direct-chat-msg -->
-
         </div>
     </div>
     <div class="popup-messages-footer">
-	     
-         <textarea id="mensajeUsuario" type="text"  placeholder="Escriba su mensaje aqui..." rows="10" cols="40" name="mensajeUsuario"></textarea>
+         <textarea id="mensajeUsuario" type="text"  placeholder="Escriba su mensaje aqui..." rows="5" cols="40" name="mensajeUsuario">
+         </textarea>
 	      <button id="enviar" type="button" class="btn-success">Enviar </button>
         <div class="btn-footer">
-            
         </div>
     </div>
 </div>
-
+</div>
 </body>
 
 
 
 
 
-
-<!--
-<div class="card card-primary" >
-    <h5>Mensajes</h5>
-    <div id="mensajesChat"></div>
-    <input id="mensajeUsuario" type="text" name="mensajeUsuario" placeholder="Escriba su mensaje aqui..">
-    <button id="enviar" type="button" class="btn-success">Enviar </button>
-</div>-->
+<!--<div class="card card-primary" >-->
+    <!--<h5>Mensajes</h5>-->
+    <!--<div id="mensajesChat"></div>-->
+    <!--<input id="mensajeUsuario" type="text" name="mensajeUsuario" placeholder="Escriba su mensaje aqui..">-->
+    <!--<button id="enviar" type="button" class="btn-success">Enviar </button>-->
+<!--</div>-->
 
 <script>
     (function($){
@@ -179,6 +119,9 @@
         $("#addClass").click(function () {
             $('#qnimate').addClass('popup-box-on');
         });
+        setTimeout(function () {
+            webSocket.send("abrir:chat:Juanito");
+        }, 1000);
 
         $("#removeClass").click(function () {
             $('#qnimate').removeClass('popup-box-on');

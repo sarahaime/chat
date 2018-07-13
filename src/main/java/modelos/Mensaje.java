@@ -10,11 +10,13 @@ public class Mensaje {
     private int chatID;
     private String mensaje;
     private Date fechaEnvio;
+    private boolean admin;
 
-    public Mensaje(int chatID, String mensaje, Date fechaEnvio) {
+    public Mensaje(int chatID, String mensaje, Date fechaEnvio, boolean admin) {
         this.chatID = chatID;
         this.mensaje = mensaje;
         this.fechaEnvio = fechaEnvio;
+        this.admin = admin;
     }
 
     public Mensaje() { }
@@ -22,8 +24,6 @@ public class Mensaje {
     public void setChatID(int chatID) {
         this.chatID = chatID;
     }
-
-
 
     public String getMensaje() {
         return mensaje;

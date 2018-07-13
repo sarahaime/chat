@@ -11,6 +11,8 @@ public class Chat {
     private String username;
     private String adminAddress = "-1";
     public static int nextChatID = 0;
+    private boolean isOpen = false;
+    private Mensaje lastMessage;
 //    @OneToMany(fetch = FetchType.EAGER)
 //    private Set<Mensaje> mensajes;
 
@@ -25,7 +27,16 @@ public class Chat {
         this.lastMessage = lastMessage;
     }
 
-    private Mensaje lastMessage;
+
+
+    public boolean isOpen() {
+        return isOpen;
+    }
+
+    public void setOpen(boolean open) {
+        isOpen = open;
+    }
+
 
 
 

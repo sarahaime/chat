@@ -35,17 +35,6 @@ public class WebSocketServices {
         return null;
     }
 
-    private static void deleteChatMessages(int chatID){
-        List<Mensaje> aux= new ArrayList<>();
-        for (Mensaje msj : mensajes){
-            if(msj.getChatID() == chatID) continue;
-            aux.add(msj);
-        }
-
-        mensajes = aux;
-    }
-
-
 
 
     public static void updateChat(Chat ch){
@@ -79,17 +68,6 @@ public class WebSocketServices {
         return ch;
     }
 
-
-    public static void deleteChat(String address){
-        for(Chat chat: chats){
-            if (chat.getUserAddress().equals(address) || chat.getAdminAddress().equals(address)){
-                deleteChatMessages(chat.getId());
-                chats.remove(chat);
-                break;
-            }
-        }
-    }
-
     public static int createChat(String clientAddress, String username){
 
         for(Chat chat: chats){
@@ -108,38 +86,25 @@ public class WebSocketServices {
     }
 
 
-
-    public static List<Chat> getListChats(){
+//esto se va a usar en una ruta
+    public static List<Chat> getListChats(  String adminAdd ){
         List<Chat> temp = new ArrayList<>();
         for(Chat chat: chats){
-            if (chat.getAdminAddress() == null){
+            if (chat.getAdminAddress() == null || chat.getAdminAddress().equalsIgnoreCase(adminAdd)){
                 temp.add(chat);
             }
         }
-        getLastMessage(temp);
         return temp;
     }
 
-    public static void createChatMessage(Mensaje sms){
-        mensajes.add(sms);
-    }
-
-    public static List<Mensaje> getMessages(int chatID){
-        List<Mensaje> aux = new ArrayList<>();
+    public static String getMessages(int chatID){
+        String aux = "";
         for(Mensaje mensaje: mensajes){
             if(mensaje.getChatID() == chatID){
-                aux.add(mensaje);
+                aux = aux + mensaje.getMensaje() + "<br>";
             }
         }
         return aux;
     }
-
-    private static void getLastMessage(List<Chat> chats){
-        for(Chat chat: chats){
-            List<Mensaje> ownMessages = getMessages(chat.getId());
-            chat.setLastMessage(ownMessages.get(0));
-        }
-    }
-
 
 }
