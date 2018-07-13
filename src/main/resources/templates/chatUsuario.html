@@ -23,13 +23,23 @@
 
         $(document).ready(function(){
             conectar();
-
             //para enviar los mensajes
             $("#enviar").click(function(){
+                if( $("#mensajeUsuario").val() === "") return;
                 $("#mensajesChat").append("<div class='pull-right'><strong>Tu:</strong> " + $("#mensajeUsuario").val() + " </div> <br>");
                 webSocket.send("user:chat:" + $("#mensajeUsuario").val());
                 $("#mensajeUsuario").val("");
             });
+
+            $( "#divAbrirChat" ).hide();
+            $("#addClass").click(function () {
+                $('#qnimate').addClass('popup-box-on');
+            });
+
+            $("#removeClass").click(function () {
+                $('#qnimate').removeClass('popup-box-on');
+            });
+
         });
 
 
@@ -40,7 +50,14 @@
             }
         }
 
-        setInterval(verificarConexion, 5000);
+        function iniciarChat(){
+            webSocket.send("abrir:chat:" + $("#nombre").val());
+        }
+
+        setInterval(verificarConexion, 1000);
+
+
+
 
 
     </script>
@@ -50,28 +67,28 @@
 <body>
 <div style="margin-top:60px;position:fixed;height:32px;width:100%; bottom: 20px">
 <div class="container text-center">
-    <div class="row">
+    <div class="row" id="divAbrirChat">
         <div class="round hollow text-center">
-            <a href="#" id="addClass"><span class="glyphicon glyphicon-comment"></span> Abrir chat </a>
+            <a href="#" id="addClass"><span class="glyphicon glyphicon-comment"></span> Abrir chat</a>
         </div>
         <hr>
     </div>
+
+    <div class="row" id="divNombre">
+        <div class="round hollow text-center">
+            <a><input id="nombre" placeholder="Digite su nombre...">  <button id="btnNombre" type="submit" class="btn btn-outline-primary"> Chatear </button>
+            </a>
+        </div>
+        <hr>
+    </div>
+
 </div>
 <div class="popup-box chat-popup" id="qnimate">
     <div class="popup-head">
         <div class="popup-head-left pull-left"><img src="https://cdn1.iconfinder.com/data/icons/managers-15/494/Untitled-32-512.png" alt="iamgurdeeposahan"> Usuario
-
             <button data-widget="remove" id="removeClass" class="chat-header-button pull-right" type="button"><i class="glyphicon glyphicon-off"></i></button>
-
         </div>
         <div class="popup-head-right pull-right">
-           <!-- <div class="btn-group">
-               &lt;!&ndash; <button class="chat-header-button" data-toggle="dropdown" type="button" aria-expanded="false">
-                    <i class="glyphicon glyphicon-cog"></i> </button>&ndash;&gt;
-              
-            </div>-->
-
-
         </div>
     </div>
     <div class="popup-messages">
@@ -115,18 +132,20 @@
 </script>
 
 <script>
-    $(function(){
-        $("#addClass").click(function () {
-            $('#qnimate').addClass('popup-box-on');
-        });
-        setTimeout(function () {
-            webSocket.send("abrir:chat:Juanito");
-        }, 1000);
+$(function () {
 
-        $("#removeClass").click(function () {
-            $('#qnimate').removeClass('popup-box-on');
-        });
-    })
+    $("#btnNombre" ).click(function() {
+        if($("#nombre" ).val() !== "") {
+            $("#divNombre").hide("fast");
+            $("#divAbrirChat").show("slow", function () {
+                alert("Presione abrir chat :)");
+            });
+            iniciarChat()
+        }
+    });
+
+})
+
 </script>
 
 

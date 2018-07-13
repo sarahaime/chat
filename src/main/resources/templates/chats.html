@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link href="css/admin.css" rel="stylesheet">
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+
+</head>
+<body>
+
+<div class="col-sm-4 side"  th:fragment="contacts" xmlns:th="http://www.w3.org/1999/xhtml">
+    <div class="side-one">
+        <div class="row heading">
+            <div class="col-sm-3 col-xs-3 heading-avatar">
+                <div class="heading-avatar-icon">
+                    <img src="https://bootdey.com/img/Content/avatar/avatar1.png">
+                </div>
+            </div>
+            <div class="col-sm-1 col-xs-1  heading-dot  pull-right">
+                <i class="fa fa-ellipsis-v fa-2x  pull-right" aria-hidden="true"></i>
+            </div>
+            <div class="col-sm-2 col-xs-2 heading-compose  pull-right">
+                <i class="fa fa-comments fa-2x  pull-right" aria-hidden="true"></i>
+            </div>
+        </div>
+        <div class="row sideBar" th:each="chat:${listaChats}">
+            <div class="row sideBar-body"  th:onclick="'abrirChat(\'' + ${chat.id} + '\');'" >
+                <div class="col-sm-3 col-xs-3 sideBar-avatar">
+                    <div class="avatar-icon">
+                        <img src="https://cdn1.iconfinder.com/data/icons/managers-15/494/Untitled-32-512.png">
+                    </div>
+                </div>
+                <div class="col-sm-9 col-xs-9 sideBar-main">
+                    <div class="row">
+                        <div class="col-sm-8 col-xs-8 sideBar-name">
+                            <span class="name-meta" th:text="{chat.username}"> </span>
+                        </div>
+                        <div class="col-sm-4 col-xs-4 pull-right sideBar-time">
+                  <span class="time-meta pull-right">18:18
+                </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+</body>
+
+<script>
+
+</script>
+
+</html>
