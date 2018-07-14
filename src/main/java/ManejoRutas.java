@@ -331,6 +331,14 @@ public class ManejoRutas {
         });
 
 
+        get("/chats/disponibles/:useradd", (request, response) -> {
+            System.out.println(request.params("useradd"));
+            Map<String, Object> modelo = new HashMap<>();
+            modelo.put("listaChats", WebSocketServices.getListChats(request.params("useradd")));
+            return renderThymeleaf(modelo, "/chats");
+        });
+
+
 
 
     }

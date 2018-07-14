@@ -100,10 +100,11 @@ public class WebSocketServices {
     public static List<Chat> getListChats(  String adminAdd ){
         List<Chat> temp = new ArrayList<>();
         for(Chat chat: chats){
-            if (chat.getAdminAddress() == null || chat.getAdminAddress().equalsIgnoreCase(adminAdd)){
+            if (chat.getAdminAddress() == "-1" || chat.getAdminAddress().equalsIgnoreCase(adminAdd)){
                 temp.add(chat);
             }
         }
+        System.out.println(temp.size());
         return temp;
     }
 
