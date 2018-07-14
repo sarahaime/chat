@@ -24,10 +24,10 @@
             </div>
         </div>
         <div class="row sideBar" th:each="chat:${listaChats}">
-            <div class="row sideBar-body"  >
+            <div class="row sideBar-body"  th:onclick="'abrirChat(\''+${chat.id}+ '\');'">
                 <div class="col-sm-3 col-xs-3 sideBar-avatar">
                     <div class="avatar-icon">
-                        <img src="https://cdn1.iconfinder.com/data/icons/managers-15/494/Untitled-32-512.png">
+                        <img src="https://bootdey.com/img/Content/avatar/avatar3.png">
                     </div>
                 </div>
                 <div class="col-sm-9 col-xs-9 sideBar-main">
@@ -36,8 +36,8 @@
                             <span class="name-meta" th:text="${chat.username}"> </span>
                         </div>
                         <div class="col-sm-4 col-xs-4 pull-right sideBar-time">
-                  <span class="time-meta pull-right">18:18
-                </span>
+                              <span class="time-meta pull-right">18:18
+                            </span>
                         </div>
                     </div>
                 </div>
@@ -47,6 +47,9 @@
 </div>
 
 <script>
+    function abrirChat(id){
+        console.log("abriendo chat?");
+    }
     $(document).ready(function(){
         //$("#listadoChats").load('/chats/disponibles/' +  location.hostname + ":" + location.port );
     });
