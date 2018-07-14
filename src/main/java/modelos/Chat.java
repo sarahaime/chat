@@ -1,6 +1,7 @@
 package modelos;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.Set;
 //@Entity
 public class Chat {
@@ -13,6 +14,16 @@ public class Chat {
     public static int nextChatID = 0;
     private boolean isOpen = false;
     private Mensaje lastMessage;
+
+    public Date getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(Date fecha) {
+        this.fecha = fecha;
+    }
+
+    private Date fecha = new Date();
 //    @OneToMany(fetch = FetchType.EAGER)
 //    private Set<Mensaje> mensajes;
 
