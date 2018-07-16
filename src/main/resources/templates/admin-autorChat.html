@@ -1,12 +1,68 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
     <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
     <link href="css/admin.css" rel="stylesheet">
     <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script>
+        //web socket
+        var webSocket;
+        function conectar() {
+            webSocket = new WebSocket("ws://" + location.hostname + ":" + location.port + "/mensajeria");
+            //indicando los eventos:
+            webSocket.onmessage = function(data){ recibirMsj(data); };
+        }
+
+        function recibirMsj(mensaje){
+            console.log(mensaje);
+            if(mensaje.data ===":-:actualizar:-:"){
+                $("#listadoChats").load('/chats/disponibles/' +  location.hostname + ":" + location.port );
+                return;
+            }
+            $("#buzon").append(mensaje.data);
+        }
 
 
+        //para reconexion automatica
+        function verificarConexion(){
+            if(webSocket.readyState === 3 || !webSocket){
+                conectar();
+            }
+        }
+
+
+        function abrirChat(id, username){
+            $("#userName").val(username);
+            $("#buzon").val("");
+            webSocket.send("tomar:chat:" + id);
+        }
+
+        $(document).ready(function() {
+            conectar();
+            $("#listadoChats").load('/chats/disponibles/' +  location.hostname + ":" + location.port );
+
+            //para enviar los mensajes
+            $("#enviar").click(function () {
+                if ($("#mensaje").val() === "") return;
+                $("#buzon").append(
+                    "           <div class=\"row message-body\">" +
+                    "                    <div class=\"col-sm-12 message-main-sender\">" +
+                    "                        <div class=\"sender\">" +
+                    "                            <div class=\"message-text\">" +
+                                                     $("#mensaje").val() +
+                    "                            </div>" +
+                    "                        </div>" +
+                    "                    </div>" +
+                    "                </div>"
+                );
+                webSocket.send("admin:chat:" + $("#mensaje").val());
+                $("#mensaje").val("");
+            });
+        });
+
+        setInterval(verificarConexion, 1000);
+    </script>
 </head>
 <body>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -38,49 +94,19 @@
                     </div>
                 </div>
                 <div class="col-sm-8 col-xs-7 heading-name">
-                    <a class="heading-name-meta">John Doe
+                    <a class="heading-name-meta"> <div id="userName"> </div>
                     </a>
                     <span class="heading-online">Online</span>
                 </div>
                 <div class="col-sm-1 col-xs-1  heading-dot pull-right">
-                    <button data-widget="remove" id="removeClass" class="chat-header-button pull-right" type="button"><i class="glyphicon glyphicon-off"></i></button>
+                    <a href="/home">
+                        <button data-widget="remove" id="removeClass" class="chat-header-button pull-right" type="button"><i class="glyphicon glyphicon-off"></i></button>
+                    </a>
                 </div>
             </div>
 
-            <div class="row message" id="conversation">
-                <div class="row message-previous">
-                    <div class="col-sm-12 previous">
-                        <a onclick="previous(this)" id="ankitjain28" name="20">
-                            Show Previous Message!
-                        </a>
-                    </div>
-                </div>
-
-                <div class="row message-body">
-                    <div class="col-sm-12 message-main-receiver">
-                        <div class="receiver">
-                            <div class="message-text">
-                                Hi, what are you doing?!
-                            </div>
-                            <span class="message-time pull-right">
-                Sun
-              </span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row message-body">
-                    <div class="col-sm-12 message-main-sender">
-                        <div class="sender">
-                            <div class="message-text">
-                                I am doing nothing man!
-                            </div>
-                            <span class="message-time pull-right">
-                Sun
-              </span>
-                        </div>
-                    </div>
-                </div>
+            <div class="row message">
+                <div id="buzon"> </div>
             </div>
 
             <div class="row reply">
@@ -88,7 +114,7 @@
                     <i class="fa fa-smile-o fa-2x"></i>
                 </div>
                 <div class="col-sm-9 col-xs-9 reply-main">
-                    <textarea class="form-control" rows="1" id="comment"></textarea>
+                    <textarea class="form-control" rows="1" id="mensaje"></textarea>
                 </div>
                 <div class="col-sm-1 col-xs-1 reply-recording">
                     <i class="fa fa-microphone fa-2x" aria-hidden="true"></i>
@@ -117,12 +143,6 @@
                 "left": "-100%"
             });
         });
-
-
-        $(document).ready(function(){
-            $("#listadoChats").load('/chats/disponibles/' +  location.hostname + ":" + location.port );
-        });
-
     })
 
 </script>

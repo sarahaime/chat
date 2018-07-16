@@ -18,9 +18,8 @@ public class WebSocketServices {
     public static void enviarMensaje(String mensaje, String addresDestino){
         for(Session sesionConectada : usuariosEnLinea){
             try {
-                if( sesionConectada.getRemote().toString().equalsIgnoreCase(addresDestino)){
+                if( sesionConectada.getRemoteAddress().toString().equalsIgnoreCase(addresDestino)){
                     sesionConectada.getRemote().sendString(mensaje);
-                    break;
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -100,9 +99,9 @@ public class WebSocketServices {
     public static List<Chat> getListChats(  String adminAdd ){
         List<Chat> temp = new ArrayList<>();
         for(Chat chat: chats){
-            if (chat.getAdminAddress() == "-1" || chat.getAdminAddress().equalsIgnoreCase(adminAdd)){
+            //if (chat.getAdminAddress() == "-1" || chat.getAdminAddress().equalsIgnoreCase(adminAdd)){
                 temp.add(chat);
-            }
+            //}
         }
         System.out.println(temp.size());
         return temp;

@@ -5,13 +5,12 @@
     <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
     <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
-
 </head>
 
 <div  th:fragment="chats" xmlns:th="http://www.w3.org/1999/xhtml">
         <div class="row sideBar">
             <div  th:each="chat:${listaChats}">
-                <div>
+                <div th:onclick="'abrirChat(\'' +${chat.id} +'\',\''+${chat.username}+'\')'" >
                 <div class="row sideBar-body">
                     <div class="col-sm-3 col-xs-3 sideBar-avatar">
                         <div class="avatar-icon">
@@ -37,10 +36,12 @@
 </div>
 
 <script>
-    function abrirChat(id){
-        console.log("abriendo chat?");
+    function abrirChat(id, username){
+        console.log("abriendo chat? = " + username);
+        $("#userName").text(username);
+        webSocket.send("tomar:chat:" + id);
     }
     $(document).ready(function(){
-        //$("#listadoChats").load('/chats/disponibles/' +  location.hostname + ":" + location.port );
+        //
     });
 </script>

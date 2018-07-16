@@ -27,13 +27,11 @@ public class WebSocketHandler {
 
     @OnWebSocketMessage
     public void recibiendoMensaje(Session usuario, String message) {
-        System.out.println(message);
         try {
             String comando = message.split(":chat:")[0];
             String val = message.split(":chat:")[1];
 
-            System.out.println(comando);
-            System.out.println(val);
+            System.out.println(usuario.getRemoteAddress());
 
             if (comando.equals("tomar")){
                 int chatID = Integer.parseInt(val);
@@ -42,7 +40,7 @@ public class WebSocketHandler {
                 chat.setOpen(true);
                 WebSocketServices.updateChat(chat);
                 WebSocketServices.enviarMensaje(WebSocketServices.getMessages(chatID),chat.getAdminAddress());
-                WebSocketServices.enviarBroadcast("recargar");
+                WebSocketServices.enviarBroadcast(":-:actualizar:-:");
             }
 
             if (comando.equals("soltar")){
@@ -55,21 +53,38 @@ public class WebSocketHandler {
             if (comando.equals("abrir")){
                 WebSocketServices.createChat(usuario.getRemoteAddress().toString(), val);
                 usuario.getRemote().sendString("<strong>Bot: </strong>  Hola " + val + "<br>");
+                WebSocketServices.enviarBroadcast(":-:actualizar:-:");
             }
 
             //mensaje desde el usuario
             if (comando.equals("user")){
                 Chat chat = WebSocketServices.getChatByUserAdd(usuario.getRemoteAddress().toString());
-                String msj = "<strong> "+ chat.getUsername() + " dice: </strong>" + val;
-                WebSocketServices.mensajes.add(new Mensaje(chat.getId(), msj, new Date(), false) );
+                String msj =  "           <div class=\"row message-body\">" +
+                        "                    <div class=\"col-sm-12 message-main-receiver\">" +
+                        "                        <div class=\"receiver\">" +
+                        "                            <div class=\"message-text\">" +
+                                                            val +
+                        "                            </div>" +
+                        "                        </div>" +
+                        "                    </div>" +
+                        "                </div>";
+                WebSocketServices.mensajes.add(new Mensaje(chat.getId(), msj) );
                 if(chat.isOpen()) WebSocketServices.enviarMensaje(msj,chat.getAdminAddress());
             }
 
             //un admin manda un mesaje
             if (comando.equals("admin")){
                 Chat chat = WebSocketServices.getChatByAdminAdd(usuario.getRemoteAddress().toString());
-                String msj =  "<strong>El Bogger dice: <strong>" + val;
-                WebSocketServices.mensajes.add(new Mensaje(chat.getId(),msj, new Date(), true));
+                String msj =  "           <div class=\"row message-body\">" +
+                        "                    <div class=\"col-sm-12 message-main-sender\">" +
+                        "                        <div class=\"sender\">" +
+                        "                            <div class=\"message-text\">" +
+                                                            val +
+                        "                            </div>" +
+                        "                        </div>" +
+                        "                    </div>" +
+                        "                </div>";
+                WebSocketServices.mensajes.add(new Mensaje(chat.getId(),msj));
                 WebSocketServices.enviarMensaje(msj,chat.getUserAddress());
             }
 
