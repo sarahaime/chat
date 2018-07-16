@@ -14,14 +14,14 @@ public class WebSocketHandler {
 
     @OnWebSocketConnect
     public void conectando(Session usuario){
-        System.out.println("Conectando Usuario: "+usuario.getRemoteAddress().toString());
+       // System.out.println("Conectando Usuario: "+usuario.getRemoteAddress().toString());
         WebSocketServices.usuariosEnLinea.add(usuario);
     }
 
     //hay que dejar los 2 parametros ultimos, son parte del protocolo, si no se ponen el programa explota
     @OnWebSocketClose
     public void cerrandoConexion(Session usuario, int statusCode, String reason) {
-        System.out.println("Desconectando el usuario: " + usuario.getRemoteAddress().toString());
+       // System.out.println("Desconectando el usuario: " + usuario.getRemoteAddress().toString());
         WebSocketServices.usuariosEnLinea.remove(usuario);
     }
 
@@ -31,12 +31,11 @@ public class WebSocketHandler {
             String comando = message.split(":chat:")[0];
             String val = message.split(":chat:")[1];
 
-            System.out.println(usuario.getRemoteAddress());
-
             if (comando.equals("tomar")){
                 int chatID = Integer.parseInt(val);
                 Chat chat = WebSocketServices.getChatByID(chatID);
                 chat.setAdminAddress(usuario.getRemoteAddress().toString());
+                WebSocketServices.cerrarChats( usuario.getRemoteAddress().toString() );
                 chat.setOpen(true);
                 WebSocketServices.updateChat(chat);
                 WebSocketServices.enviarMensaje(WebSocketServices.getMessages(chatID),chat.getAdminAddress());
@@ -68,8 +67,18 @@ public class WebSocketHandler {
                         "                        </div>" +
                         "                    </div>" +
                         "                </div>";
-                WebSocketServices.mensajes.add(new Mensaje(chat.getId(), msj) );
+
+                Mensaje mensaje = new Mensaje();
+
+                mensaje.setChatID(chat.getId());
+                mensaje.setMensaje(msj);
+                mensaje.setFechaEnvio(new Date());
+                System.out.println("Enviando mensaje al chat # " + mensaje.getChatID());
+
+                WebSocketServices.mensajes.add(mensaje);
+
                 if(chat.isOpen()) WebSocketServices.enviarMensaje(msj,chat.getAdminAddress());
+
             }
 
             //un admin manda un mesaje
@@ -84,15 +93,12 @@ public class WebSocketHandler {
                         "                        </div>" +
                         "                    </div>" +
                         "                </div>";
+
+                System.out.println("El admin mensajea a chat # " + chat.getId() + ' ' + chat.getUsername());
                 WebSocketServices.mensajes.add(new Mensaje(chat.getId(),msj));
                 WebSocketServices.enviarMensaje(msj,chat.getUserAddress());
             }
-
-            //Enviar un simple mensaje al cliente que mando al servidor..
-        //    usuario.getRemote().sendString("Mensaje enviado al Servidor: " + message);
-            //mostrando a todos los clientes
-          //  WebSocketServices.enviarMensaje(message,"abc123");
-
+            
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -34,7 +34,7 @@
 
         function abrirChat(id, username){
             $("#userName").val(username);
-            $("#buzon").val("");
+            $("#buzon").empty();
             webSocket.send("tomar:chat:" + id);
         }
 

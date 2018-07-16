@@ -37,8 +37,8 @@
 
 <script>
     function abrirChat(id, username){
-        console.log("abriendo chat? = " + username);
         $("#userName").text(username);
+        $("#buzon").empty();
         webSocket.send("tomar:chat:" + id);
     }
     $(document).ready(function(){

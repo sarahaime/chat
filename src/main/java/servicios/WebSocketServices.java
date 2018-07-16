@@ -18,11 +18,19 @@ public class WebSocketServices {
     public static void enviarMensaje(String mensaje, String addresDestino){
         for(Session sesionConectada : usuariosEnLinea){
             try {
-                if( sesionConectada.getRemoteAddress().toString().equalsIgnoreCase(addresDestino)){
+                if( sesionConectada.getRemoteAddress().toString().equalsIgnoreCase( addresDestino)){
                     sesionConectada.getRemote().sendString(mensaje);
                 }
             } catch (IOException e) {
                 e.printStackTrace();
+            }
+        }
+    }
+
+    public static void cerrarChats(String admin){
+        for(Chat chat: chats){
+            if (chat.getAdminAddress().equals(admin)){
+                chat.setOpen(false);
             }
         }
     }
@@ -49,7 +57,9 @@ public class WebSocketServices {
     public static void updateChat(Chat ch){
         for(Chat chat: chats){
             if (chat.getId() == ch.getId()){
+                chat.setOpen(ch.isOpen());
                 chat.setAdminAddress(ch.getAdminAddress());
+                chat.setUsername(ch.getUsername());
                 return;
             }
         }
@@ -71,7 +81,8 @@ public class WebSocketServices {
         for(Chat chat: chats){
             if (chat.getAdminAddress().equals(administratorAddress)){
                 ch = chat;
-                break;
+                System.out.println(ch.getUsername());
+                if(chat.isOpen()) return chat;
             }
         }
         return ch;
@@ -87,8 +98,9 @@ public class WebSocketServices {
         }
 
         Chat chat = new Chat(clientAddress);
-        chat.setId(Chat.nextChatID++);
+        chat.setId(++Chat.nextChatID);
         chat.setUsername(username);
+        chat.setOpen(false);
         chats.add(chat);
 
         return chat.getId();
@@ -99,7 +111,7 @@ public class WebSocketServices {
     public static List<Chat> getListChats(  String adminAdd ){
         List<Chat> temp = new ArrayList<>();
         for(Chat chat: chats){
-            //if (chat.getAdminAddress() == "-1" || chat.getAdminAddress().equalsIgnoreCase(adminAdd)){
+           // if (chat.getAdminAddress() == "-1" || chat.getAdminAddress().equalsIgnoreCase("/" + adminAdd)){
                 temp.add(chat);
             //}
         }

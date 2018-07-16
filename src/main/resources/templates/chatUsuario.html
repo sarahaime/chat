@@ -19,8 +19,8 @@
 
         function recibirMsj(mensaje){
             if(mensaje.data ===":-:actualizar:-:") return;
-            console.log(mensaje);
-            $("#mensajesChat").append(mensaje.data);
+
+            $("#mensajesChat").append("<strong> El Blogger dice:</strong>" + mensaje.data);
         }
 
         $(document).ready(function(){

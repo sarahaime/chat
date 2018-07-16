@@ -135,9 +135,6 @@ public class ManejoRutas {
                     modelo.put("votoGusta", true);
                 else  modelo.put("votoGusta", false);
 
-
-                System.out.println("legusto?? : ******* " + las.getLikesByArticuloYUsuarioID(id, usuario.getId(), 1));
-
             }
 
             Set<Comentario> comentarios = articulo.getComentarios();
@@ -334,7 +331,6 @@ public class ManejoRutas {
         get("/chats/disponibles/:useradd", (request, response) -> {
             System.out.println(request.params("useradd"));
             Map<String, Object> modelo = new HashMap<>();
-            System.out.println(request.params("useradd") + "***************************");
             modelo.put("listaChats", WebSocketServices.getListChats(request.params("useradd")));
             return renderThymeleaf(modelo, "/chats");
         });
