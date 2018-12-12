@@ -64,7 +64,6 @@ public class ManejoRutas {
             return renderThymeleaf(modelo,"/registrar");
         });
 
-
         get("/test", (request, response) -> {
             ArticuloServices as = new ArticuloServices();
 
@@ -104,7 +103,6 @@ public class ManejoRutas {
             response.redirect("/registrar");
             return "";
         });
-
 
         get("/login", (request, response)->{
             Map<String, Object> modelo = new HashMap<>();
@@ -163,8 +161,6 @@ public class ManejoRutas {
             response.redirect("/home?pagina=1");
             return "";
         });
-
-
 
         post("/comentar", (request, response) -> {
             ComentarioServices cs = new ComentarioServices();
@@ -278,7 +274,6 @@ public class ManejoRutas {
             return null;
         });
 
-
         post("/comentario/votar", (request, response) -> {
 
             long articuloid = (long) Integer.parseInt(request.queryParams("articuloid"));
@@ -295,7 +290,6 @@ public class ManejoRutas {
             response.redirect("/ver?id=" + articuloid);
             return null;
         });
-
 
         get("/pagina", (request, response) -> {
             ArticuloServices as = new ArticuloServices();
@@ -327,16 +321,12 @@ public class ManejoRutas {
             return renderThymeleaf(modelo,"/pagina");
         });
 
-
         get("/chats/disponibles/:useradd", (request, response) -> {
             System.out.println(request.params("useradd"));
             Map<String, Object> modelo = new HashMap<>();
             modelo.put("listaChats", WebSocketServices.getListChats(request.params("useradd")));
             return renderThymeleaf(modelo, "/chats");
         });
-
-
-
 
     }
 
@@ -370,7 +360,5 @@ public class ManejoRutas {
 
         return usuario;
     }
-
-
 
 }

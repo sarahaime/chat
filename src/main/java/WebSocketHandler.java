@@ -98,7 +98,7 @@ public class WebSocketHandler {
                 WebSocketServices.mensajes.add(new Mensaje(chat.getId(),msj));
                 WebSocketServices.enviarMensaje(msj,chat.getUserAddress());
             }
-            
+
         } catch (IOException e) {
             e.printStackTrace();
         }
